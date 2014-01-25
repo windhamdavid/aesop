@@ -1,7 +1,7 @@
 <?php
 
 	// Start WordPress
-	require_once( '../../../../../wp-load.php' );
+	require_once( '../../../../../wp/wp-load.php' );
 
 	// Capability check
 	if ( !current_user_can( 'publish_posts' ) )
