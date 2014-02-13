@@ -34,8 +34,11 @@
         position: absolute;
         width:100%;
         left:0;
-        top:-150px; // CHEATING
         z-index: -1;
+
+        &.is-parallax {
+            top:-150px; // CHEATING
+        }
 
     }
 
@@ -87,13 +90,13 @@
     .aesop-content-img {
         padding:1.2rem;
     }
-    .aesop-content-comp-columns-2 {
+    .aesop-content-comp-columns-2 .aesop-content-comp-inner{
         .content-columns(2, 20);
     }
-    .aesop-content-comp-columns-3 {
+    .aesop-content-comp-columns-3 .aesop-content-comp-inner{
         .content-columns(3, 20);
     }
-    .aesop-content-comp-columns-4 {
+    .aesop-content-comp-columns-4 .aesop-content-comp-inner{
         .content-columns(4, 20);
     }
 }
@@ -111,15 +114,32 @@ body .aesop-entry-suck-top {
     .transition(all .75s ease-in-out);
 }
 
-// image component
-.aesop-image-component-image {
-    margin-top:0.65rem;
+// sequence gallery
+.aesop-sequence-gallery-wrap {
+    .aesop-sequence-img{
+        margin-left:auto;
+        margin-right:auto;
+    }
 }
 
-.aesop-image-component-caption {
-    display: block;
-    margin-bottom:1rem;
+// image component
+.aesop-image-component {
+
+    .aesop-image-component-image {
+        margin-top:0.65rem;
+
+        &.aesop-image-component-caption-right {
+            text-align: right;
+        }
+
+    }
+
+    .aesop-image-component-caption {
+        display: block;
+        margin-bottom:1rem;
+    }
 }
+
 .aesop-component-align-left {
     margin-right:2rem;
 }
@@ -181,9 +201,11 @@ body .aesop-entry-suck-top {
     }
 }
 
-/*!
- * Fotorama 4.4.8 | http://fotorama.io/license/
- */
+// quote
+.aesop-quote-component {
+
+}
+
  .aesop-gallery-component {
     z-index: 0;
  }

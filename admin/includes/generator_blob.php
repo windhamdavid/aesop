@@ -1,20 +1,12 @@
 <?php
 
-	// Start WordPress
-	require_once( '../../../../../wp-load.php' );
+function aesop_shortcodes_blob() {
+$codes = aesop_shortcodes();
 
-	// Capability check
-	if ( !current_user_can( 'publish_posts' ) )
-		die( 'Access denied' );
+$blob = array();
 
-	// Param check
-	if ( empty( $_GET['shortcode'] ) )
-		die( 'Shortcode not specified' );
-
-	$shortcode = aesop_shortcodes( $_GET['shortcode'] );
-
+foreach( $codes as $slug => $shortcode ) {
 	$return = '';
-
 	// Shortcode has atts
 	if ( count( $shortcode['atts'] ) && $shortcode['atts'] ) {
 		foreach ( $shortcode['atts'] as $attr_name => $attr_info ) {
@@ -38,11 +30,11 @@
 				// image upload
 				if('media_upload' == $attr_info['type']) {
 
-					$return .= '<input type="' . $attr_field_type . '" name="' . $attr_name . '" value="' . $attr_info['default'] . '" id="aesop-generator-attr-' . $attr_name . '" class="aesop-generator-attr aesop-generator-attr-'.$attr_field_type.'" />';
-					$return .= '<input id="aesop-upload-img" type="button" class="button button-primary button-large" value="Upload Media"/>';
+					$return .= '<input type="' . $attr_field_type . '" name="' . $attr_name . '" value="" id="aesop-generator-attr-' . $attr_name . '" class="aesop-generator-attr aesop-generator-attr-'.$attr_field_type.'" />';
+					$return .= '<input id="aesop-upload-img" type="button" class="button button-primary button-large" value="Upload"/>';
 
 				} else {
-					$return .= '<input type="' . $attr_field_type . '" name="' . $attr_name . '" value="' . $attr_info['default'] . '" id="aesop-generator-attr-' . $attr_name . '" class="aesop-generator-attr aesop-generator-attr-'.$attr_field_type.'" />';
+					$return .= '<input type="' . $attr_field_type . '" name="' . $attr_name . '" value="" id="aesop-generator-attr-' . $attr_name . '" class="aesop-generator-attr aesop-generator-attr-'.$attr_field_type.'" />';
 				}
 			}
 			$return .= '</p>';
@@ -64,5 +56,7 @@
 
 	$return .= '<input type="hidden" name="aesop-generator-result" id="aesop-generator-result" value="" />';
 
-	echo $return;
-?>
+	$blob[$slug] = $return;	
+}
+	return $blob;
+}

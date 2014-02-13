@@ -3,10 +3,8 @@ jQuery(document).ready(function($) {
 	$('.aesop-generator').dropkick({
 		change: function () {
     		var queried_shortcode = $('#aesop-generator-select').find(':selected').val();
-			$('#aesop-generator-settings').addClass('aesop-loading-animation');
-			$('#aesop-generator-settings').load($('#aesop-generator-url').val() + '/admin/includes/generator.php?shortcode=' + queried_shortcode, function() {
-				$('#aesop-generator-settings').removeClass('aesop-loading-animation');
-			});
+			jQuery('#aesop-generator-settings').html('')
+			$('#aesop-generator-settings').html(aesopshortcodes[queried_shortcode])
         }
 	});
 
@@ -58,7 +56,7 @@ jQuery('#aesop-upload-img').live('click', function( event ){
     // When an image is selected, run a callback.
     file_frame.on( 'select', function() {
       	attachment = file_frame.state().get('selection').first().toJSON();
-  		jQuery('#aesop-generator-attr-img,#aesop-generator-attr-src').val(attachment.url);
+  		jQuery('#aesop-generator-attr-img,#aesop-generator-attr-src, #aesop-generator-attr-hosted').val(attachment.url);
     });
 
     // Finally, open the modal

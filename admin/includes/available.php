@@ -1,8 +1,11 @@
 <?php
 
 /**
- * List of available shortcodes
+ 	* 	Master list of all available shortcodes and attributes
+ 	*
+ 	* 	@since    1.0.0
  */
+
 if(!function_exists('aesop_shortcodes')){
 	function aesop_shortcodes( $shortcode = null ) {
 		$shortcodes = array(
@@ -10,12 +13,6 @@ if(!function_exists('aesop_shortcodes')){
 				'name' 				=> __('Image', 'aesop-core'),
 				'type' 				=> 'single',
 				'atts' 				=> array(
-					'width' 			=> array(
-						'type'		=> 'text',
-						'values' 	=> array( ),
-						'default' 	=> 'content',
-						'desc' 		=> __( 'Component Width', 'aesop-core' )
-					),
 					'img' 			=> array(
 						'type'		=> 'media_upload',
 						'values' 	=> array( ),
@@ -64,10 +61,10 @@ if(!function_exists('aesop_shortcodes')){
 					'captionposition' => array(
 						'type'		=> 'text',
 						'values' 	=> array(
-							__('bottom', 'aesop-core'),
-							__('top', 'aesop-core')
+							__('left', 'aesop-core'),
+							__('right', 'aesop-core')
 						 ),
-						'default' 	=> 'bottom',
+						'default' 	=> 'left',
 						'desc' 		=> __( 'Caption Position', 'aesop-core' )
 					),
 					'lightbox' 			=> array(
@@ -133,6 +130,12 @@ if(!function_exists('aesop_shortcodes')){
 						'default' 	=> '#282828',
 						'desc' 		=> __( 'Hex Color of Background', 'aesop-core' )
 					),
+					'img' 	=> array(
+						'values' 	=> array( ),
+						'type'		=> 'media_upload',
+						'default' 	=> '',
+						'desc' 		=> __( 'Optional Background Image', 'aesop-core' )
+					),
 					'text'			 => array(
 						'values' 	=> array(),
 						'type'		=> 'color',
@@ -154,6 +157,34 @@ if(!function_exists('aesop_shortcodes')){
 						),
 						'default' 	=> 'center',
 						'desc' 		=> __( 'Alignment', 'aesop-core' )
+					),
+					'size' 			=> array(
+						'type'		=> 'text',
+						'values' 	=> array(
+							__('-2', 'aesop-core'),
+							__('-1', 'aesop-core'),
+							__('0', 'aesop-core'),
+							__('1', 'aesop-core'),
+							__('2', 'aesop-core'),
+							__('3', 'aesop-core')
+						),
+						'default' 	=> 'center',
+						'desc' 		=> __( 'Quote Size', 'aesop-core' )
+					),
+					'parallax' 		=> array(
+						'type'		=> 'text',
+						'values'	=> array(
+							__('on', 'aesop-core'),
+							__('off', 'aesop-core')
+						),
+						'default' 	=> 'off',
+						'desc' 		=> __('Enable Quote Parallax', 'aesop-core' )
+					),
+					'offset' 		=> array(
+						'type'		=> 'text',
+						'values'	=> array(),
+						'default' 	=> 500,
+						'desc' 		=> __('If using parallax, starting offset.', 'aesop-core' )
 					),
 					'quote' 		=> array(
 						'type'		=> 'text',
@@ -294,12 +325,6 @@ if(!function_exists('aesop_shortcodes')){
 						'default' 	=> 'on',
 						'desc' 		=> __('Parallax Background Image', 'aesop-core' )
 					),
-					'parallaxspeed' => array(
-						'type'		=> 'text',
-						'values' 	=> array(),
-						'default' 	=> '0.1',
-						'desc' 		=> __('Parallax Background Speed', 'aesop-core' )
-					),
 					'floater' 		=> array(
 						'type'		=> 'text',
 						'values'	=> array(
@@ -325,11 +350,18 @@ if(!function_exists('aesop_shortcodes')){
 						'default' 	=> 'right',
 						'desc' 		=> __('Position of Floater', 'aesop-core' )
 					),
+					'floateroffset' => array(
+						'type'		=> 'text',
+						'values' 	=> array(),
+						'desc' 		=> __('Offset Amount of Floater (px or %)', 'aesop-core' )
+					),
 					'floaterdirection' => array(
 						'type'		=> 'text',
 						'values' 	=> array(
 							__('up', 'aesop-core'),
-							__('down', 'aesop-core')
+							__('down', 'aesop-core'),
+							__('left', 'aesop-core'),
+							__('right', 'aesop-core')
 						),
 						'default' 	=> 'up',
 						'desc' 		=> __('Parallax Direction of Floater', 'aesop-core' )

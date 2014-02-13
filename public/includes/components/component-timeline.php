@@ -12,11 +12,11 @@ if (!function_exists('aesop_timeline_stop_shortcode')){
 		$defaults = array(
 			'num' => '2007',
 		);
-		$atts = shortcode_atts($defaults, $atts);
+		$atts = apply_filters('aesop_timeline_defaults',shortcode_atts($defaults, $atts));
 
 		// actions
-		$actiontop = do_action('aesop_map_component_before');
-		$actionbottom = do_action('aesop_parallax_component_after');
+		$actiontop = do_action('aesop_timeline_before'); //action
+		$actionbottom = do_action('aesop_timeline_after'); //action
 
 		$out = sprintf('%s<h2 class="aesop-timeline-stop">%s</h2>',$actiontop, $atts['num']);
 
@@ -26,7 +26,7 @@ if (!function_exists('aesop_timeline_stop_shortcode')){
 
 if (!function_exists('aesop_timeline_class_loader')){
 
-	add_action('wp','aesop_timeline_class_loader');
+	add_action('wp','aesop_timeline_class_loader',11); // has to run after components are loaded
 	function aesop_timeline_class_loader() {
 
 		global $post;
@@ -51,10 +51,11 @@ class AesopTimelineComponent {
 	function aesop_timeline_loader(){
 
 		?>
+			<!-- Aesop Timeline -->
 			<script>
 			jQuery(document).ready(function(){
 
-				jQuery('.aesop-entry-content').scrollNav({
+				jQuery('.aesop-entry-content,.entry-content').scrollNav({
 				    sections: '.aesop-timeline-stop',
 				    arrowKeys: true,
 				    insertTarget: '.aesop-timeline',
@@ -63,7 +64,7 @@ class AesopTimelineComponent {
 				    showHeadline: false,
 				    scrollOffset: 80,
 				});
-
+	
 			});
 
 			</script>

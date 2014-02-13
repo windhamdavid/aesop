@@ -15,8 +15,8 @@ if (!function_exists('aesop_map_shortcode')) {
 		$hash = rand();
 
 		// actions
-		$actiontop = do_action('aesop_parallax_component_before');
-		$actionbottom = do_action('aesop_parallax_component_after');
+		$actiontop = do_action('aesop_map_before'); //action
+		$actionbottom = do_action('aesop_map_after'); //action
 
 
 		$out = sprintf('%s<section id="aesop-map-component" class="aesop-component aesop-map-component" style="height:%spx"></section>%s',$actiontop, $atts['height'], $actionbottom);
@@ -36,8 +36,8 @@ class AesopMapComponent {
 
 		global $post;
 
-		$markers = get_post_meta($post->ID,'aesop_map_component_locations', false);
-		$start = get_post_meta($post->ID,'aesop_map_start', true);
+		$markers = isset( $post ) ? get_post_meta($post->ID,'aesop_map_component_locations', false) : false;
+		$start = isset( $post ) ? get_post_meta($post->ID,'aesop_map_start', true) : false;
 
 		if( isset($post) && is_single() && has_shortcode( $post->post_content, 'aesop_map') )  { ?>
 			<script>

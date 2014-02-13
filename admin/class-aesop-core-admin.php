@@ -3,15 +3,15 @@
  	* AI Core
  	*
  	* @package   Aesop_Core_Admin
- 	* @author    Nick Haskins <email@nickhaskins.com>
+ 	* @author    Nick Haskins <nick@aesopinteractive.com>
  	* @license   GPL-2.0+
- 	* @link      http://example.com
+ 	* @link      http://aesopinteractive.com
  	* @copyright 2013 Nick Haskins
 */
 /**
  	*
  	* @package Aesop_Core_Admin
- 	* @author  Your Name <email@example.com>
+ 	* @author  Nick Haskins <nick@aesopinteractive.com>
 */
 class Aesop_Core_Admin {
 
@@ -42,10 +42,10 @@ class Aesop_Core_Admin {
 	*/
 	private function __construct() {
 
-		require_once( AI_CORE_DIR.'admin/includes/nextpagebtn.php' );
+		require_once( AI_CORE_DIR.'admin/includes/help.php' );
+		require_once( AI_CORE_DIR.'admin/includes/notify.php' );
 		require_once( AI_CORE_DIR.'admin/includes/components/component-map.php' );
         require_once( AI_CORE_DIR.'admin/includes/components/component-gallery.php' );
-		require_once( AI_CORE_DIR.'admin/includes/visualsc.php' );
 
         if( !class_exists( 'CMB_Meta_Box' ) ) {
     		require_once( AI_CORE_DIR.'/admin/includes/custom-meta-boxes/custom-meta-boxes.php' );
@@ -66,6 +66,7 @@ class Aesop_Core_Admin {
 		add_action( 'media_buttons', array($this,'generator_button' ),100);
 		add_action( 'admin_footer', array($this,'generator_popup' ));
 		add_action('admin_enqueue_scripts', array($this,'admin_scripts'));
+		add_filter( 'wp_fullscreen_buttons', array($this,'fs_generator_button' ));
 	}
 
 	/**
@@ -109,6 +110,10 @@ class Aesop_Core_Admin {
 
 				// Enqueue scripts
 				wp_enqueue_script( 'ai-core-script' );
+
+				include( AI_CORE_DIR . '/admin/includes/generator_blob.php' );
+
+				wp_localize_script( 'ai-core-script', 'aesopshortcodes', aesop_shortcodes_blob() );
 				wp_enqueue_script('aesop-shortcodes-selectbox');
 
 				// color picker
@@ -130,9 +135,18 @@ class Aesop_Core_Admin {
 	 	* @since     1.0.0
 	*/
 	public function generator_button() {
-		echo '<a href="#TB_inline?width=640&height=640&inlineId=aesop-generator-wrap" class="button thickbox aesop-add-story-component" title="Add Story Component"><span class="aesop-admin-button-icon dashicons dashicons-plus"></span> Add Component</a>';
+		echo '<a href="#TB_inline?width=640&height=640&inlineId=aesop-generator-wrap" class="button thickbox aesop-add-story-component" title="Add Story Component"><span class="aesop-admin-button-icon dashicons dashicons-plus"></span> ', _e('Add Component', 'aesop-core') ,'</a>';
 	}
 
+	/**
+	 	* Add the generator button in distraction free writing mode
+	 	*
+	 	* @since     0.9.96
+	*/
+	public function fs_generator_button($buttons){
+		$buttons[] = self::generator_button();
+		return $buttons;
+	}
 	/**
 	 	* Draw the component generator
 	 	*

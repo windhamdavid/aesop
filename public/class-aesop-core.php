@@ -3,41 +3,23 @@
  * Aesop Core
  *
  * @package   Aesop_Core
- * @author    Nick Haskins <email@nickhaskins.com>
+ * @author    Nick Haskins <nick@aesopinteractive.com>
  * @license   GPL-2.0+
- * @link      http://example.com
+ * @link      http://aesopinteractive.com
  * @copyright 2013 Nick Haskins
  */
 
 /**
- * Plugin class. This class should ideally be used to work with the
- * public-facing side of the WordPress site.
- *
- * If you're interested in introducing administrative or dashboard
- * functionality, then refer to `class-plugin-name-admin.php`
- *
+ * Plugin class
  *
  * @package Aesop_Core
- * @author  Nick Haskins <email@nickhaskins,com>
+ * @author  Nick Haskins <nick@aesopinteractive.com>
  */
 class Aesop_Core {
 
 	/**
-	 * Plugin version, used for cache-busting of style and script file references.
 	 *
-	 * @since   1.0.0
-	 *
-	 * @var     string
-	 */
-
-	/**
-	 *
-	 * Unique identifier for your plugin.
-	 *
-	 *
-	 * The variable name is used as the text domain when internationalizing strings
-	 * of text. Its value should match the Text Domain file header in the main
-	 * plugin file.
+	 * Unique identifier
 	 *
 	 * @since    1.0.0
 	 *
@@ -62,26 +44,12 @@ class Aesop_Core {
 	 */
 	private function __construct() {
 
-		//load component array
+		// load component array
 		require_once( AI_CORE_DIR.'admin/includes/available.php');
 
+		// load component helpers
 		require_once( AI_CORE_DIR.'public/includes/browserclasses.php');
 		require_once( AI_CORE_DIR.'public/includes/imgsizes.php');
-
-		// load components
-		require_once( AI_CORE_DIR.'public/includes/components/component-parallax.php' );
-		require_once( AI_CORE_DIR.'public/includes/components/component-map.php' );
-		require_once( AI_CORE_DIR.'public/includes/components/component-image.php' );
-		require_once( AI_CORE_DIR.'public/includes/components/component-video.php' );
-		require_once( AI_CORE_DIR.'public/includes/components/component-gallery.php' );
-		require_once( AI_CORE_DIR.'public/includes/components/component-character.php' );
-		require_once( AI_CORE_DIR.'public/includes/components/component-timeline.php' );
-		require_once( AI_CORE_DIR.'public/includes/components/component-heading.php' );
-		require_once( AI_CORE_DIR.'public/includes/components/component-cbox.php' );
-		require_once( AI_CORE_DIR.'public/includes/components/component-audio.php' );
-		require_once( AI_CORE_DIR.'public/includes/components/component-quote.php' );
-		require_once( AI_CORE_DIR.'public/includes/components/component-document.php' );
-		require_once( AI_CORE_DIR.'public/includes/components/component-collections.php' );
 
 		// Load plugin text domain
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
@@ -89,8 +57,13 @@ class Aesop_Core {
 		// Activate plugin when new blog is added
 		add_action( 'wpmu_new_blog', array( $this, 'activate_new_site' ) );
 
-		add_action('init', array($this,'register_shortcodes'));
+		// we are loading this super late so that themes can override shortcode fucntions
+		add_action('wp', array($this,'register_shortcodes'),10);
+
+		// enqueue scripts
 		add_action('wp_enqueue_scripts', array($this,'scripts'));
+
+		// remove strap br and p tags beore and after shortcodes
 		add_filter( 'the_content', array($this,'shortcode_empty_paragraph_fix'));
 
 	}
@@ -255,7 +228,17 @@ class Aesop_Core {
 	 * @since    1.0.0
 	 */
 	private static function single_deactivate() {
-		// @TODO: Define deactivation functionality here
+
+		// delete option used to check version for notification
+		if( false == delete_option( 'ai_core_version' ) ) {
+
+			$out = '<div class="error"><p>';
+			$out .= __( 'Doh! There was an issue deactivating Aesop. Try again perhaps?.', 'aesop-core' );
+			$out .= '</p></div>';
+
+			echo apply_filters('ai_deactivation_error_message',$out);
+
+		}
 	}
 
 	/**
@@ -268,8 +251,7 @@ class Aesop_Core {
 		$domain = $this->plugin_slug;
 		$locale = apply_filters( 'plugin_locale', get_locale(), $domain );
 
-		load_textdomain( $domain, trailingslashit( WP_LANG_DIR ) . $domain . '/' . $domain . '-' . $locale . '.mo' );
-
+		$out = load_textdomain( $domain, trailingslashit( AI_CORE_DIR ). 'languages/' . $domain . '-' . $locale . '.mo' );
 	}
 
 	/**
@@ -281,17 +263,24 @@ class Aesop_Core {
 
 		wp_enqueue_script('jquery');
 
-		wp_enqueue_style('ai-core-style', AI_CORE_URL.'/public/assets/css/style.css', AI_CORE_VERSION, true);
+		if (! defined('AI_CORE_UNSTYLED')) {
+			wp_enqueue_style('ai-core-style', AI_CORE_URL.'/public/assets/css/style.css', AI_CORE_VERSION, true);
+		}
+
 		wp_enqueue_script('ai-core', AI_CORE_URL.'/public/assets/js/ai-core.min.js', array('jquery'), AI_CORE_VERSION, true);
 	}
 
 	/**
-	 * Register shortcode components
+	 * Load and register components
 	 *
 	 * @since    1.0.0
 	 */
 	public function register_shortcodes(){
-		// Register Shortcodes
+
+		foreach (glob(AI_CORE_DIR.'public/includes/components/*.php') as $component) { 
+    		require_once $component;
+		}
+
 		foreach ( aesop_shortcodes() as $shortcode => $params ) {
 			add_shortcode ( 'aesop_'.$shortcode, 'aesop_'.$shortcode.'_shortcode' );
 		}

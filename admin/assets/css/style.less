@@ -19,8 +19,6 @@
     background-color : #eee;
     border: 1px solid #999;
     border-radius: 3px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
     margin: 2px;
     padding: 2px;
 }
@@ -90,7 +88,7 @@
         }
         &.image.dk_option_current a,
         &.image a:hover {
-            background-position: 0 -600px;
+            background-position: 0 0;
         }
 
         // character
@@ -121,11 +119,11 @@
         }
 
         // chapter head
-        &.chapter_heading {
+        &.chapter{
             background-position: 0 -240px;
         }
-        &.chapter_heading.dk_option_current a,
-        &.chapter_heading a:hover {
+        &.chapter.dk_option_current a,
+        &.chapter a:hover {
             background-position: 0 -240px;
         }
 
@@ -313,12 +311,20 @@
 .aesop-buttoninsert-wrap {
     margin:0 !important;
 }
-
-
-.aesop-loading-animation {
-    min-height: 100px;
-    background: 50% 50% url(../img/loading.gif) no-repeat;
+.wp-media-buttons .aesop-admin-button-icon {
+    line-height: 1.5em;
 }
-.aesop-loading-animation * {
-    display: none;
+
+.wp-fullscreen-active {
+    .aesop-add-story-component {
+        float: right;
+        line-height: 1.9;
+        height: auto;
+        margin-left: 12px;
+
+        span {
+            line-height: 1.6;
+            font-size: 18px;
+        }
+    }
 }
